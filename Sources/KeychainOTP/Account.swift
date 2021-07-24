@@ -13,29 +13,23 @@ public struct Account: Identifiable, Codable, Hashable {
     public var id = UUID()
     public let label: String
     public let issuer: String?
-    public let color: String
-    public let image: URL?
     public let generator: Generator
 
-    public init(label: String, issuer: String? = nil, color: String, image: URL? = nil, generator: Generator) {
+    public init(label: String, issuer: String? = nil, generator: Generator) {
         self.label = label
         self.issuer = issuer
-        self.color = color
-        self.image = image
         self.generator = generator
     }
 
-    public init(id: UUID = UUID(), label: String, issuer: String? = nil, color: String, image: URL? = nil, generator: Generator) {
+    public init(id: UUID = UUID(), label: String, issuer: String? = nil, generator: Generator) {
         self.id = id
         self.label = label
         self.issuer = issuer
-        self.color = color
-        self.image = image
         self.generator = generator
     }
 
     public func incrementCounter(keychain: Keychain) -> Account {
-        let account = Account(id: id, label: label, issuer: issuer, color: color, image: image, generator: generator.successor())
+        let account = Account(id: id, label: label, issuer: issuer, generator: generator.successor())
         try? account.save(to: keychain)
         return account
     }
