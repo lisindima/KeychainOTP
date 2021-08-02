@@ -13,12 +13,6 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-/*
- *    Data utilities from CryptoSwift. CryptoSwift has been dropped as a dependency,
- *    but these are preserved to maintain API compatability with earlier versions
- *     of SwiftOTP.
- */
-
 import Foundation
 
 public extension Data {

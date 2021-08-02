@@ -26,17 +26,13 @@
 
 import Foundation
 
-// MARK: - private
-
 extension String {
-    /// Data never nil
     var dataUsingUTF8StringEncoding: Data {
         utf8CString.withUnsafeBufferPointer {
             Data($0.dropLast().map { UInt8($0) })
         }
     }
-
-    /// Array<UInt8>
+    
     var arrayUsingUTF8StringEncoding: [UInt8] {
         utf8CString.withUnsafeBufferPointer {
             $0.dropLast().map { UInt8($0) }

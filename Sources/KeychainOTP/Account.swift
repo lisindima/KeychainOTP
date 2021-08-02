@@ -1,6 +1,6 @@
 //
 //  Account.swift
-//  OTP
+//  KeychainOTP
 //
 //  Created by Дмитрий Лисин on 21.02.2021.
 //
@@ -9,34 +9,47 @@ import CryptoKit
 import Foundation
 import KeychainAccess
 
+/// A model representing an account.
 public struct Account: Identifiable, Codable, Hashable {
+    /// The id of the account.
     public var id = UUID()
+    
+    /// A string indicating the account represented by the token.
+    ///
+    /// This is often an email address or username.
     public let label: String
+    
+    /// A string indicating the provider or service which issued the token.
     public let issuer: String?
+    
+    /// A password generator containing this token's secret, algorithm, etc.
     public let generator: Generator
 
+    /// Initializes a new account with the given parameters.
+    ///  - Parameters:
+    ///     - label: The account name for the token.
+    ///     - issuer: The entity which issued the token.
+    ///     - generator: The password generator.
     public init(label: String, issuer: String? = nil, generator: Generator) {
         self.label = label
         self.issuer = issuer
         self.generator = generator
     }
 
-    public init(id: UUID = UUID(), label: String, issuer: String? = nil, generator: Generator) {
-        self.id = id
-        self.label = label
-        self.issuer = issuer
-        self.generator = generator
-    }
-
     public func incrementCounter(keychain: Keychain) -> Account {
-        let account = Account(id: id, label: label, issuer: issuer, generator: generator.successor())
+        let account = Account(label: label, issuer: issuer, generator: generator.successor())
         try? account.save(to: keychain)
         return account
     }
 
     public func generate(time: Date) -> String? {
         let counter = generator.factor.counterValue(at: time)
-        return generateOTP(secret: generator.secret, algorithm: generator.algorithm, counter: counter, digits: generator.digits)
+        return generateOTP(
+            secret: generator.secret,
+            algorithm: generator.algorithm,
+            counter: counter,
+            digits: generator.digits
+        )
     }
 
     private func generateOTP(secret: Data, algorithm: OTPAlgorithm = .sha1, counter: UInt64, digits: Int = 6) -> String? {
@@ -100,7 +113,7 @@ public struct Account: Identifiable, Codable, Hashable {
         try keychain.remove(id.uuidString)
     }
 
-    public static func loadAll(from keychain: Keychain) -> [Account] {
+    public func loadAll(from keychain: Keychain) -> [Account] {
         let decoder = JSONDecoder()
         let items = keychain.allKeys()
         let accounts = try! items.compactMap { key throws -> Account? in

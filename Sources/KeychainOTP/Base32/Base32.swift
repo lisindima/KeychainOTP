@@ -26,10 +26,6 @@
 
 import Foundation
 
-// https://tools.ietf.org/html/rfc4648
-
-// MARK: - Base32 Data <-> String
-
 public func base32Encode(_ data: Data) -> String {
     data.withUnsafeBytes { (ptr: UnsafeRawBufferPointer) in
         base32encode(ptr.baseAddress!, data.count, alphabetEncodeTable)
@@ -54,8 +50,6 @@ public func base32HexDecodeToData(_ string: String) -> Data? {
     }
 }
 
-// MARK: - Base32 [UInt8] <-> String
-
 public func base32Encode(_ array: [UInt8]) -> String {
     base32encode(array, array.count, alphabetEncodeTable)
 }
@@ -71,8 +65,6 @@ public func base32Decode(_ string: String) -> [UInt8]? {
 public func base32HexDecode(_ string: String) -> [UInt8]? {
     base32decode(string, extendedHexAlphabetDecodeTable)
 }
-
-// MARK: extensions
 
 public extension String {
     // base32
@@ -92,7 +84,6 @@ public extension String {
         }
     }
 
-    // base32Hex
     var base32HexDecodedData: Data? {
         base32HexDecodeToData(self)
     }
@@ -111,7 +102,6 @@ public extension String {
 }
 
 public extension Data {
-    // base32
     var base32EncodedString: String {
         base32Encode(self)
     }
@@ -124,7 +114,6 @@ public extension Data {
         String(data: self, encoding: .utf8).flatMap(base32DecodeToData)
     }
 
-    // base32Hex
     var base32HexEncodedString: String {
         base32HexEncode(self)
     }

@@ -1,6 +1,6 @@
 //
 //  TypeAlgorithm.swift
-//
+//  KeychainOTP
 //
 //  Created by Дмитрий Лисин on 22.02.2021.
 //
