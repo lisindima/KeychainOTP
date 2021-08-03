@@ -30,7 +30,7 @@ public struct Account: Identifiable, Codable, Hashable {
     ///     - label: The account name for the token.
     ///     - issuer: The entity which issued the token.
     ///     - generator: The password generator.
-    public init(label: String, issuer: String? = nil, generator: Generator) {
+    public init(label: String, issuer: String?, generator: Generator) {
         self.label = label
         self.issuer = issuer
         self.generator = generator
